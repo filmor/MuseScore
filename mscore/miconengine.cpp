@@ -121,7 +121,8 @@ void MIconEnginePrivate::loadDataForModeAndState(QSvgRenderer* renderer, QIcon::
                   f.open(QIODevice::ReadOnly);
                   QByteArray ba = f.readAll();
                   if (mode == QIcon::Disabled) {
-                        if (Ms::preferences.globalStyle == Ms::MuseScoreStyleType::LIGHT) {
+                        if (Ms::preferences.globalStyle == Ms::MuseScoreStyleType::LIGHT ||
+                            Ms::preferences.globalStyle == Ms::MuseScoreStyleType::NATIVE) {
                               if (state == QIcon::On)
                                     ba.replace("fill:#3b3f45", "fill:#8daac7");
                               else
@@ -135,7 +136,8 @@ void MIconEnginePrivate::loadDataForModeAndState(QSvgRenderer* renderer, QIcon::
                               }
                         }
                   else {
-                        if (Ms::preferences.globalStyle == Ms::MuseScoreStyleType::LIGHT) {
+                        if (Ms::preferences.globalStyle == Ms::MuseScoreStyleType::LIGHT ||
+                            Ms::preferences.globalStyle == Ms::MuseScoreStyleType::NATIVE) {
                               if (state == QIcon::On)
                                     ba.replace("fill:#3b3f45", "fill:#4171a2");
                               }

@@ -470,6 +470,8 @@ void Preferences::read()
       styleName              = s.value("style", styleName).toString();
       if (styleName == "dark")
             globalStyle  = MuseScoreStyleType::DARK;
+      else if (styleName == "native")
+            globalStyle  = MuseScoreStyleType::NATIVE;
       else
             globalStyle  = MuseScoreStyleType::LIGHT;
 
@@ -1546,6 +1548,10 @@ void PreferenceDialog::apply()
       if (styleName->currentIndex() == int(MuseScoreStyleType::DARK)) {
             prefs.styleName = "dark";
             prefs.globalStyle = MuseScoreStyleType::DARK;
+            }
+      else if (styleName->currentIndex() == int(MuseScoreStyleType::NATIVE)) {
+            prefs.styleName = "native";
+            prefs.globalStyle = MuseScoreStyleType::NATIVE;
             }
       else {
             prefs.styleName = "light";

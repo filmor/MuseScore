@@ -678,7 +678,8 @@ MuseScore::MuseScore()
 
       for (int i = 0; i < VOICES; ++i) {
             QToolButton* tb = new QToolButton(this);
-            if (preferences.globalStyle == MuseScoreStyleType::LIGHT)
+            if (preferences.globalStyle == MuseScoreStyleType::LIGHT ||
+                preferences.globalStyle == MuseScoreStyleType::NATIVE)
                   tb->setStyleSheet(vbsh);
             tb->setToolButtonStyle(Qt::ToolButtonTextOnly);
             QPalette p(tb->palette());
@@ -5345,60 +5346,63 @@ int main(int argc, char* av[])
                   const char* name;
                   const char* color;
                   };
-            MgStyleConfigData::animationsEnabled = preferences.animations;
-            MgStyle* st = new MgStyle;
-            QApplication::setStyle(st);
-            QPalette p(QApplication::palette());
-            QSettings s;
 
-            switch (preferences.globalStyle) {
-                  case MuseScoreStyleType::DARK: {
-                        static const PaletteItem pi[] = {
-                              { QPalette::Window,          "WindowColor",          "#525252" },
-                              { QPalette::WindowText,      "WindowTextColor",      "#FFFFFF" },
-                              { QPalette::Base,            "BaseColor",            "#424242" },
-                              { QPalette::AlternateBase,   "AlternateBaseColor",   "#626262" },
-                              { QPalette::Text,            "TextColor",            "#FFFFFF" },
-                              { QPalette::Button,          "ButtonColor",          "#525252" },
-                              { QPalette::ButtonText,      "ButtonTextColor",      "#FFFFFF" },
-                              { QPalette::BrightText,      "BrightTextColor",      "#000000" },
+            if (preferences.globalStyle != MuseScoreStyleType::NATIVE) {
+                MgStyleConfigData::animationsEnabled = preferences.animations;
+                MgStyle* st = new MgStyle;
+                QApplication::setStyle(st);
+                QPalette p(QApplication::palette());
+                QSettings s;
 
-//                            { QPalette::Light,           "LightColor",           "#00FF00" },
-//                            { QPalette::Midlight,        "MidlightTextColor",    "#00FF00" },
-//                            { QPalette::Dark,            "DarkTextColor",        "#00FF00" },
-//                            { QPalette::Mid,             "MidColor",             "#00FF00" },
-//                            { QPalette::Shadow,          "ShadowColor",          "#00FF00" },
-                              { QPalette::Highlight,       "HighlightColor",       "#88bff6" },
-//                            { QPalette::HighlightedText, "HighlightedTextColor", "#00FF00" },
-                              { QPalette::Link,            "HighlightedTextColor", "#00ffff" },
-                              { QPalette::LinkVisited,     "HighlightedTextColor", "#00ffff" },
-                              { QPalette::ToolTipBase,     "ToolTipBaseColor",     "#808080" },
-                              { QPalette::ToolTipText,     "ToolTipTextColor",     "#000000" },
-                              };
-                        for (auto i : pi)
-                              p.setColor(i.role, s.value(i.name, i.color).value<QColor>());
-                        break;
-                        }
-                  case MuseScoreStyleType::LIGHT:
-                        static const PaletteItem pi[] = {
-                              { QPalette::Window,        "WindowColor",        "#e3e3e3"  },
-                              { QPalette::WindowText,    "WindowTextColor",    "#333333"  },
-                              { QPalette::Base,          "BaseColor",          "#f9f9f9"  },
-                              { QPalette::AlternateBase, "AlternateBaseColor", "#eeeeee"  },
-                              { QPalette::Text,          "TextColor",          "#333333"  },
-                              { QPalette::Button,        "ButtonColor",        "#c9c9c9"  },
-                              { QPalette::ButtonText,    "ButtonTextColor",    "#333333"  },
-                              { QPalette::BrightText,    "BrightTextColor",    "#000000"  },
-                              { QPalette::ToolTipBase,   "ToolTipBaseColor",   "#fefac2"  },
-                              { QPalette::ToolTipText,   "ToolTipTextColor",   "#000000"  },
-                              { QPalette::Link,          "LinkColor",          "#3a80c6"  },
-                              { QPalette::LinkVisited,   "LinkVisitedColor",   "#3a80c6"  },
-                              };
-                        for (auto i : pi)
-                              p.setColor(i.role, s.value(i.name, i.color).value<QColor>());
-                        break;
-                  }
-            QApplication::setPalette(p);
+                switch (preferences.globalStyle) {
+                case MuseScoreStyleType::DARK: {
+                    static const PaletteItem pi[] = {
+                        { QPalette::Window,          "WindowColor",          "#525252" },
+                        { QPalette::WindowText,      "WindowTextColor",      "#FFFFFF" },
+                        { QPalette::Base,            "BaseColor",            "#424242" },
+                        { QPalette::AlternateBase,   "AlternateBaseColor",   "#626262" },
+                        { QPalette::Text,            "TextColor",            "#FFFFFF" },
+                        { QPalette::Button,          "ButtonColor",          "#525252" },
+                        { QPalette::ButtonText,      "ButtonTextColor",      "#FFFFFF" },
+                        { QPalette::BrightText,      "BrightTextColor",      "#000000" },
+
+                        //                            { QPalette::Light,           "LightColor",           "#00FF00" },
+                        //                            { QPalette::Midlight,        "MidlightTextColor",    "#00FF00" },
+                        //                            { QPalette::Dark,            "DarkTextColor",        "#00FF00" },
+                        //                            { QPalette::Mid,             "MidColor",             "#00FF00" },
+                        //                            { QPalette::Shadow,          "ShadowColor",          "#00FF00" },
+                        { QPalette::Highlight,       "HighlightColor",       "#88bff6" },
+                        //                            { QPalette::HighlightedText, "HighlightedTextColor", "#00FF00" },
+                        { QPalette::Link,            "HighlightedTextColor", "#00ffff" },
+                        { QPalette::LinkVisited,     "HighlightedTextColor", "#00ffff" },
+                        { QPalette::ToolTipBase,     "ToolTipBaseColor",     "#808080" },
+                        { QPalette::ToolTipText,     "ToolTipTextColor",     "#000000" },
+                    };
+                    for (auto i : pi)
+                        p.setColor(i.role, s.value(i.name, i.color).value<QColor>());
+                    break;
+                }
+                case MuseScoreStyleType::LIGHT:
+                    static const PaletteItem pi[] = {
+                        { QPalette::Window,        "WindowColor",        "#e3e3e3"  },
+                        { QPalette::WindowText,    "WindowTextColor",    "#333333"  },
+                        { QPalette::Base,          "BaseColor",          "#f9f9f9"  },
+                        { QPalette::AlternateBase, "AlternateBaseColor", "#eeeeee"  },
+                        { QPalette::Text,          "TextColor",          "#333333"  },
+                        { QPalette::Button,        "ButtonColor",        "#c9c9c9"  },
+                        { QPalette::ButtonText,    "ButtonTextColor",    "#333333"  },
+                        { QPalette::BrightText,    "BrightTextColor",    "#000000"  },
+                        { QPalette::ToolTipBase,   "ToolTipBaseColor",   "#fefac2"  },
+                        { QPalette::ToolTipText,   "ToolTipTextColor",   "#000000"  },
+                        { QPalette::Link,          "LinkColor",          "#3a80c6"  },
+                        { QPalette::LinkVisited,   "LinkVisitedColor",   "#3a80c6"  },
+                    };
+                    for (auto i : pi)
+                        p.setColor(i.role, s.value(i.name, i.color).value<QColor>());
+                    break;
+                }
+                QApplication::setPalette(p);
+            }
 
             qApp->setStyleSheet(
                   "*:disabled {\n"
