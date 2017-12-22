@@ -59,6 +59,7 @@ enum {
 enum class MuseScoreStyleType : char {
       DARK_FUSION = 0,
       LIGHT_FUSION
+      NATIVE
       };
 
 // MusicXML export break values
@@ -200,6 +201,7 @@ struct Preferences {
       void init();
       bool readDefaultStyle();
       bool isThemeDark() { return globalStyle == MuseScoreStyleType::DARK_FUSION;}
+      bool isThemeNative() { return globalStyle == MuseScoreStyleType::NATIVE;}
       };
 
 //---------------------------------------------------------

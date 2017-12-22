@@ -485,6 +485,8 @@ void Preferences::read()
             globalStyle  = MuseScoreStyleType::DARK_FUSION;
       else if (sName == "light_fusion")
             globalStyle  = MuseScoreStyleType::LIGHT_FUSION;
+      else if (sName == "native")
+            globalStyle  = MuseScoreStyleType::NATIVE;
 
       animations       = s.value("animations",       animations).toBool();
       singlePalette    = s.value("singlePalette",    singlePalette).toBool();

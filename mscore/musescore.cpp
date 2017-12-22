@@ -6121,29 +6121,31 @@ int main(int argc, char* av[])
             }
 
       if (!converterMode && !pluginMode) {
-
-            // set UI Theme
-            QApplication::setStyle(QStyleFactory::create("Fusion"));
-
             QString wd      = QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).arg(QCoreApplication::applicationName());
-            // set UI Color Palette
-            QPalette p(QApplication::palette());
-            QString jsonPaletteFilename = preferences.isThemeDark() ? "palette_dark_fusion.json" : "palette_light_fusion.json";;
-            QFile jsonPalette(QString(":/themes/%1").arg(jsonPaletteFilename));
-            // read from Documents TODO: remove this
-            if (QFile::exists(QString("%1/%2").arg(wd, "ms_palette.json")))
-                  jsonPalette.setFileName(QString("%1/%2").arg(wd, "ms_palette.json"));
-            if (jsonPalette.open(QFile::ReadOnly | QFile::Text)) {
-                  QJsonDocument d = QJsonDocument::fromJson(jsonPalette.readAll());
-                  QJsonObject o = d.object();
-                  QMetaEnum metaEnum = QMetaEnum::fromType<QPalette::ColorRole>();
-                  for (int i = 0; i < metaEnum.keyCount(); ++i) {
-                        QJsonValue v = o.value(metaEnum.valueToKey(i));
-                        if (!v.isUndefined())
-                              p.setColor(static_cast<QPalette::ColorRole>(metaEnum.value(i)), QColor(v.toString()));
+
+            if (!preferences.isThemeNative()) {
+                  // set UI Theme
+                  QApplication::setStyle(QStyleFactory::create("Fusion"));
+
+                  // set UI Color Palette
+                  QPalette p(QApplication::palette());
+                  QString jsonPaletteFilename = preferences.isThemeDark() ? "palette_dark_fusion.json" : "palette_light_fusion.json";;
+                  QFile jsonPalette(QString(":/themes/%1").arg(jsonPaletteFilename));
+                  // read from Documents TODO: remove this
+                  if (QFile::exists(QString("%1/%2").arg(wd, "ms_palette.json")))
+                        jsonPalette.setFileName(QString("%1/%2").arg(wd, "ms_palette.json"));
+                  if (jsonPalette.open(QFile::ReadOnly | QFile::Text)) {
+                        QJsonDocument d = QJsonDocument::fromJson(jsonPalette.readAll());
+                        QJsonObject o = d.object();
+                        QMetaEnum metaEnum = QMetaEnum::fromType<QPalette::ColorRole>();
+                        for (int i = 0; i < metaEnum.keyCount(); ++i) {
+                              QJsonValue v = o.value(metaEnum.valueToKey(i));
+                              if (!v.isUndefined())
+                                    p.setColor(static_cast<QPalette::ColorRole>(metaEnum.value(i)), QColor(v.toString()));
+                              }
                         }
+                  QApplication::setPalette(p);
                   }
-            QApplication::setPalette(p);
 
             // set UI Style
             QString css;
